@@ -25,8 +25,11 @@ Investigate:
 	Martin - SinusEquation:
 		- Ensure useful scientific output (spec problem)
 		
+	Martin - Why does process not terminate?
+		
 	Huw - Equation:
 		- Ensure handles inputs gracefully
+		- Allow exiting process gracefully by cancel
 		
 	Huw - FractionalEquation:
 		- Constrain inputs
