@@ -25,27 +25,43 @@ public abstract class Equation {
 	 * 
 	 * @param equationType the class of the equation 
 	 * @return the Equation
+	 * @throws cancelException 
 	 */
 	@SuppressWarnings("unchecked")
-	public static Equation createEquationFromType(Class equationType) {
+	public static Equation createEquationFromType(Class equationType) throws cancelException {
 		Constructor c =  equationType.getConstructors()[0];
 		int n_arguments = c.getParameterTypes().length;
 		Object[] arguments = new Double [n_arguments];
 		for (int i=0; i<n_arguments;i++) {
-			//ask for values
-			String s = JOptionPane.showInputDialog(null, ((char)(((byte)'a')+i))+" =", 
-					"Enter argument", JOptionPane.QUESTION_MESSAGE);
-			arguments[i] = Double.parseDouble(s);
+			
+			boolean validInput = false;
+			while (!validInput) {
+				//ask for values
+				String s = JOptionPane.showInputDialog(null, ((char)(((byte)'a')+i))+" =", 
+						"Enter argument", JOptionPane.QUESTION_MESSAGE);
+				if (s == null) {
+					throw new cancelException();
+				} else if (s.length() == 0) {
+					JOptionPane.showMessageDialog(null, "Please enter a value");
+				} else {
+					try {
+						arguments[i] = Double.parseDouble(s);
+						validInput = true;
+					} catch (NumberFormatException e) {
+						JOptionPane.showMessageDialog(null, "Please enter a valid number");
+					}
+				}
+			}
 		}
+		
 		try {
 			// we return the new instance
 			return (Equation)c.newInstance(arguments);
 		} catch (Exception e) {
 			e.printStackTrace();
 			JOptionPane.showMessageDialog(null, "alert", "alert", JOptionPane.ERROR_MESSAGE);
-		}
-		// if there was no exception
-		return null;
+			return null;
+		}		
 	}
 	
 	@Override
@@ -59,9 +75,6 @@ public abstract class Equation {
 	 * @param x the x to use with f(x)
 	 * @return the result for this equation given x.
 	 */
-	public double of(double x) {
-		
-		return 0.0d;
-	}
+	public abstract double of(double x);
 	
 }

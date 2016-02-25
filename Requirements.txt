@@ -15,7 +15,7 @@ Investigate:
 		- Help message doesn't show when more than one word passed as args
 		- increment(i) -> WHY?
 	
-	Martin - SecondOrderEquation:
+	Martin - SecondOrderEquation: - Done
 		- Not yet implemented
 		
 	Martin - EquationPanel:
@@ -25,12 +25,12 @@ Investigate:
 	Martin - SinusEquation:
 		- Ensure useful scientific output (spec problem)
 		
-	Martin - Why does process not terminate?
+	Martin - Why does process not terminate? - Done, f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-	Huw - Equation:
+	Huw - Equation: - Done
 		- Ensure handles inputs gracefully
 		- Allow exiting process gracefully by cancel
 		
-	Huw - FractionalEquation:
-		- Constrain inputs
+	Huw - FractionalEquation: Nope, can draw skip that value
+		- Constrain inputs 
 	

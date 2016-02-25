@@ -15,7 +15,7 @@ import javax.swing.JTextField;
  */
 public class GUIHelper {
 
-	public static final int standardDelay = 1000;
+	public static final int standardDelay = 600;
 	
 	/**
 	 * Auxiliary method to return the index of the first visible JDialog.
