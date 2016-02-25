@@ -9,10 +9,25 @@ Requirements:
 
 Investigate:
 
-	EquationView:
+	Martin - EquationView:
 		- Second Order in help message should be SecondOrder
+		- Sinus equation help text is wrong, should be b*x not b+x
 		- Help message doesn't show when more than one word passed as args
 		- increment(i) -> WHY?
 	
-	SecondOrderEquation:
+	Martin - SecondOrderEquation:
 		- Not yet implemented
+		
+	Martin - EquationPanel:
+		- Shows a "useful" range of output
+		- Sanitise inputs (ignore points that cause / 0 etc.)
+		
+	Martin - SinusEquation:
+		- Ensure useful scientific output (spec problem)
+		
+	Huw - Equation:
+		- Ensure handles inputs gracefully
+		
+	Huw - FractionalEquation:
+		- Constrain inputs
+	
