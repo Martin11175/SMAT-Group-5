@@ -41,7 +41,7 @@ public class SecondOrderEquation extends Equation {
 	 */
 	@Override
 	public double of(double x) {
-		return Math.pow(a*x, 2) + (b * x) + c;
+		return a * Math.pow(x, 2) + (b * x) + c;
 	}
 	
 }
