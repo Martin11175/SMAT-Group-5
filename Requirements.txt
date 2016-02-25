@@ -1,0 +1,18 @@
+Requirements:
+	- All equation types advertised on help are implemented / don't crash
+	- Can view all equation types on graph
+		- Axes scale to provide an appropriate view of the domain / range
+	- User able to supply any real decimal value (positive, negative and zero)
+	- Program should terminate in an acceptable manner (on closing graph)
+	- Gracefully accepts invalid inputs (for command line and coefficients)
+	- User should be able to back out / correct mistakes
+
+Investigate:
+
+	EquationView:
+		- Second Order in help message should be SecondOrder
+		- Help message doesn't show when more than one word passed as args
+		- increment(i) -> WHY?
+	
+	SecondOrderEquation:
+		- Not yet implemented
