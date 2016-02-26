@@ -25,7 +25,6 @@ public class EquationTest {
 		try {
 			Equation e = Equation.createEquationFromType(null);
 		} catch (cancelException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -38,7 +37,6 @@ public class EquationTest {
 				try {
 					EquationTest.eq = Equation.createEquationFromType(FirstOrderEquation.class);
 				} catch (cancelException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -60,7 +58,6 @@ public class EquationTest {
 				try {
 					EquationTest.eq = Equation.createEquationFromType(FractionEquation.class);
 				} catch (cancelException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}

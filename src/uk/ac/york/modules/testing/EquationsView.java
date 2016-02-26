@@ -20,7 +20,7 @@ import java.awt.HeadlessException;
  */
 public class EquationsView extends JApplet {
 
-	private static final String HELP_MSG = "Options are: \n\tFirstOrder: f(x) = ax+b\n\tSecondOrder: f(x) =ax^2+bx+c\n\tSinus: f(x) =a*(sin(b+x)^c)+d\n\tFraction: f(x) =a/(x+b)";
+	private static final String HELP_MSG = "Options are: \n\tFirstOrder: f(x) = ax+b\n\tSecondOrder: f(x) =ax^2+bx+c\n\tSinus: f(x) =a*(sin(b*x)^c)+d\n\tFraction: f(x) =a/(x+b)";
 
 	
 	public static void main(String[] args) {

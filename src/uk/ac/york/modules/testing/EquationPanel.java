@@ -40,38 +40,23 @@ public class EquationPanel extends JPanel {
 	public ArrayList<Double> []series = new ArrayList[2];
 
 	/**
-	 * The size of the border on the left part.
+	 * The size of all bs
 	 */
-	int leftBorder = 25;
-
+	int b = 25;
+	
 	/**
-	 * The size of the border on the right part.
-	 */
-	int rightBorder = 25;
-
-	/**
-	 * The size of the border on the lower part.
-	 */
-	int horizontalBorder = 25;
-
-	/**
-	 * The maximum represented value of x.
+	 * The maximum and minimum represented values of x and y.
 	 */
 	double maxX = 5;
+	double maxY = 5;
+	double minX = -5;
+	double minY = -5;
+	
 
 	/**
-	 * The maximum represented value in x
-	 */
-	double maxY = 9;
-
-	/**
-	 * The number of digits of the scale of X.
+	 * The number of digits of the scales of X and Y.
 	 */
 	int nDigitsX = 1;
-
-	/**
-	 * The number of digits of the scale of Y.
-	 */
 	int nDigitsY = 1;
 	
 	
@@ -87,9 +72,13 @@ public class EquationPanel extends JPanel {
 	 * @param max the maximum of the series.
 	 */
 	public void populate(double max) {
-		double step = max/2000;
-		for (int i = 0; i<2000; i=i+1) {
-			this.addValue(i*step, equation.of(i*step));
+		double step = max/1000;
+		for (int i = -1000; i<1000; i=i+1) {
+			try{
+				this.addValue(i*step, equation.of(i*step));
+			} catch (ArithmeticException e) {
+				this.addValue(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
+			}
 		}
 	}
 
@@ -106,38 +95,56 @@ public class EquationPanel extends JPanel {
 		if ((w!=0)&&(series[0]!=null)&&(series[0].size()>w))
 			pointStep = (int) (series[0].size()/w);
 		
+		// Add space to max and min
+		maxX *= 1.1;
+		minX *= 1.1;
+		maxY *= 1.1;
+		minY *= 1.1;
+		
+		// Calculate position of x and y axis
+		double xAxisHeight = h - b - ((h - 2*b) * (-minY / (maxY - minY)));
+		double yAxisWidth = b + ((w - 2*b) * (-minX / (maxX - minX)));
+		
 		// Draw y-axis.
-		g2.draw(new Line2D.Double(leftBorder, horizontalBorder, leftBorder, h-horizontalBorder));
+		g2.draw(new Line2D.Double(yAxisWidth, b, yAxisWidth, h-b));
 		// Draw x-axis.
-		g2.draw(new Line2D.Double(leftBorder, h-horizontalBorder, w-rightBorder, h-horizontalBorder));
-		g2.drawString("y="+equation.toString(), leftBorder , horizontalBorder-5);
+		g2.draw(new Line2D.Double(b, xAxisHeight, w-b, xAxisHeight));
+		g2.drawString("y="+equation.toString(), b , b-5);
+		
 		// we draw the y-labels
 		double ystep = Math.pow(10, nDigitsY);
-		if ((Math.pow(10, nDigitsY)*2)>maxY) 
+		if (ystep*2 > maxY && -ystep*2 < minY) 
 			ystep = Math.pow(10, nDigitsY-1)*2;
-
-		for (int i = 0; i<20; i++) {
+		for (int i = -10; i < 10; i++) {
 			int grade = (int)(i*ystep);
-			if (grade>maxY) {
+			if (grade > maxY) {
 				break;
+			} else if (grade < minY) {
+				continue;
+			} else if (grade == 0) {
+				continue;
 			}
-			double y1=h-horizontalBorder-(h-2*horizontalBorder)*grade/maxY;
-			g2.draw(new Line2D.Double(leftBorder-1,y1,leftBorder+1,y1));
-			g2.drawString(""+grade, 5, (int)y1+5);
+			double y1 = h - b - ((h - 2*b)*((grade - minY) / (maxY - minY)));
+			g2.draw(new Line2D.Double(yAxisWidth - 1, y1, yAxisWidth + 1, y1));
+			g2.drawString(""+grade, (int)((yAxisWidth) + (7*nDigitsY)), (int)y1+4);
 		}
 
 		// we draw the x-labels
 		double xstep = Math.pow(10, nDigitsX);
-		if ((Math.pow(10, nDigitsX)*2)>maxX) 
+		if (xstep*2 > maxX && -xstep*2 < minX) 
 			xstep = Math.pow(10, nDigitsX-1)*2;
-		for (int i = 0; i<10; i++) {
+		for (int i = -10; i < 10; i++) {
 			int grade = (int)(i*xstep);
-			if (grade>maxX) {
+			if (grade > maxX) {
 				break;
+			} else if (grade < minX) {
+				continue;
+			} else if (grade == 0) {
+				continue;
 			}
-			double x1=leftBorder+(w-leftBorder-rightBorder)*grade/maxX;
-			g2.draw(new Line2D.Double(x1,h-horizontalBorder+1,x1,h-horizontalBorder-1));
-			g2.drawString(""+grade, (int)(x1-(nDigitsX*4)-2), (int) (h-horizontalBorder+17));
+			double x1 = b + ((w - 2*b)*((grade - minX) / (maxX - minX)));
+			g2.draw(new Line2D.Double(x1, xAxisHeight - 1, x1, xAxisHeight + 1));
+			g2.drawString(""+grade, (int)(x1-(nDigitsX*4)-2), (int) (xAxisHeight+17));
 		}
 
 		// we draw data points.
@@ -145,8 +152,12 @@ public class EquationPanel extends JPanel {
 			g2.setPaint(Color.red);
 			int size = series[0].size();
 			for(int i = 0; i < size; i+=pointStep) {
-				double x = leftBorder + (w-leftBorder-rightBorder)*series[0].get(i)/maxX;
-				double y =  h - horizontalBorder - (h-2*horizontalBorder)*series[1].get(i)/maxY;
+				// Skip infinity points
+				if(series[0].get(i) == Double.POSITIVE_INFINITY
+						|| series[1].get(i) == Double.POSITIVE_INFINITY)
+					continue;
+				double x = b + (w - 2*b)*((series[0].get(i) - minX) / (maxX - minX));
+				double y =  h - b - (h - 2*b)*((series[1].get(i) - minY) / (maxY - minY));
 				g2.fill(new Ellipse2D.Double(x-2, y-2, 4, 4));
 			}
 		} catch (NullPointerException e) {
@@ -163,16 +174,28 @@ public class EquationPanel extends JPanel {
 	 * @param y the y value
 	 */
 	public void addValue(double x, double y) {
-		// if the maximum x is too low we extend it.
-		if (maxX<x) {
-			maxX=1.2*x;
-			nDigitsX=(int)Math.floor(Math.log10(maxX));
-		}
-		// if the maximum y is too low, we extend it.
-		if (maxY<y) {
-			maxY=2*y;
-			nDigitsY=(int)Math.floor(Math.log10(maxY));
-			leftBorder = 20+nDigitsY*7;
+		// if the maximum or minimum of x and y are too low we extend them.
+		if (x != Double.POSITIVE_INFINITY && y != Double.POSITIVE_INFINITY) {
+			if (maxX<x) {
+				maxX=x;
+				int digits = (int)Math.floor(Math.log10(maxX));
+				nDigitsX = digits > nDigitsX ? digits : nDigitsX;
+			}
+			if (minX>x) {
+				minX=x;
+				int digits = (int)Math.floor(Math.log10(-minX));
+				nDigitsX = digits > nDigitsX ? digits : nDigitsX;
+			}
+			if (maxY<y) {
+				maxY=y;
+				int digits = (int)Math.floor(Math.log10(maxY));
+				nDigitsY = digits > nDigitsY ? digits : nDigitsY;
+			}
+			if (minY>y) {
+				minY=y;
+				int digits = (int)Math.floor(Math.log10(-minY));
+				nDigitsY = digits > nDigitsY ? digits : nDigitsY;
+			}
 		}
 		// we add the point to the graph
 		series[0].add(x);
