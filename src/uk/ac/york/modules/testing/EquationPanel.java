@@ -33,6 +33,12 @@ public class EquationPanel extends JPanel {
 		series[1] = new ArrayList<Double>();
 
 		this.populate(10);
+		
+		// Add space to max and min
+		maxX *= 1.1;
+		minX *= 1.1;
+		maxY *= 1.1;
+		minY *= 1.1;
 	}
 	/**
 	 * The list of points.
@@ -94,13 +100,7 @@ public class EquationPanel extends JPanel {
 		int pointStep = 1;
 		if ((w!=0)&&(series[0]!=null)&&(series[0].size()>w))
 			pointStep = (int) (series[0].size()/w);
-		
-		// Add space to max and min
-		maxX *= 1.1;
-		minX *= 1.1;
-		maxY *= 1.1;
-		minY *= 1.1;
-		
+
 		// Calculate position of x and y axis
 		double xAxisHeight = h - b - ((h - 2*b) * (-minY / (maxY - minY)));
 		double yAxisWidth = b + ((w - 2*b) * (-minX / (maxX - minX)));
